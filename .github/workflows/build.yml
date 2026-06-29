@@ -1,4 +1,4 @@
-name: Build Binary
+name: Build Windows Binary
 
 on:
   workflow_dispatch:
@@ -11,8 +11,9 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 'stable'
+      - run: npm install -g esbuild
       - run: GOOS=windows GOARCH=amd64 make build
       - uses: actions/upload-artifact@v4
         with:
           name: zen-windows-x64
-          path: dist/zen.exe
+          path: zen.exe
