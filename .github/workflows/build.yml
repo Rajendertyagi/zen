@@ -1,19 +1,21 @@
-name: Build Windows Binary
-
-on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 'stable'
-      - run: npm install -g esbuild
-      - run: GOOS=windows GOARCH=amd64 make build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: zen-windows-x64
-          path: zen.exe
+ jobs:
+   build:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+       - uses: actions/setup-go@v5
+         with:
+           go-version: 'stable'
++      - run: sudo apt-get install -y mingw-w64
+       - run: npm install -g esbuild
+-      - run: GOOS=windows GOARCH=amd64 make build
++      - run: make build
++        env:
++          GOOS: windows
++          GOARCH: amd64
++          CGO_ENABLED: 1
++          CC: x86_64-w64-mingw32-gcc
+       - uses: actions/upload-artifact@v4
+         with:
+           name: zen-windows-x64
+           path: zen.exe
